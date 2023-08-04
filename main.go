@@ -13,6 +13,8 @@ import (
 
 var ginLambda *ginadapter.GinLambda
 
+var test game.hello
+
 func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	return ginLambda.ProxyWithContext(ctx, request)
 }
@@ -26,9 +28,10 @@ func main() {
 	g.GET("/pong", func(c *gin.Context) {
 		c.String(http.StatusOK, "ping")
 	})
+	test()
 
-	gameRoutes := g.Group("/game")
-	gameRoutes.GET("/piece", game.piece)
+	// gameRoutes := g.Group("/game")
+	// gameRoutes.GET("/piece", )
 
 	env := os.Getenv("GIN_MODE")
 
