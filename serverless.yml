@@ -1,0 +1,33 @@
+service: go-blokus-serverless
+
+plugins:
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  runtime: go1.x
+  region: us-east-1
+
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
+
+functions:
+  core:
+    handler: bin/main
+    memorySize: 128
+    timeout: 30
+    events:
+      - http:
+          path: /{any+}
+          method: ANY
+      # - http:
+      #     path: /pong
+      #     method: ANY
+      #     # cors: 
+
+custom: # Add the custom section
+  dotenv:
+    path: ./.env.${opt:stage, 'dev'}
