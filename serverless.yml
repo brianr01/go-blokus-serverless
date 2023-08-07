@@ -23,10 +23,6 @@ functions:
       - http:
           path: /{any+}
           method: ANY
-      # - http:
-      #     path: /pong
-      #     method: ANY
-      #     # cors: 
 
 custom: # Add the custom section
   dotenv:
