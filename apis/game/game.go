@@ -1,9 +1,15 @@
 package game
 
-type hello struct {
-	DBString string `mapstructure:"DB_STRING"`
-}
+import (
+	"net/http"
 
-func test() int {
-	return 1 + 1
+	"github.com/brianr01/go-blockus-serverless/types"
+	"github.com/brianr01/go-blockus-serverless/utils"
+	"github.com/gin-gonic/gin"
+)
+
+func Test(c *gin.Context) {
+	basePath := "./images/pieces"
+	var details []types.PieceDetails = utils.CreateAllPieceDetails(basePath)
+	c.IndentedJSON(http.StatusOK, details)
 }

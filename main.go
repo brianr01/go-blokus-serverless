@@ -8,12 +8,11 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
+	"github.com/brianr01/go-blockus-serverless/apis/game"
 	"github.com/gin-gonic/gin"
 )
 
 var ginLambda *ginadapter.GinLambda
-
-var test game.hello
 
 func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	return ginLambda.ProxyWithContext(ctx, request)
@@ -28,10 +27,9 @@ func main() {
 	g.GET("/pong", func(c *gin.Context) {
 		c.String(http.StatusOK, "ping")
 	})
-	test()
 
-	// gameRoutes := g.Group("/game")
-	// gameRoutes.GET("/piece", )
+	gameRoutes := g.Group("/game")
+	gameRoutes.GET("/pieces", game.GetAllPieces)
 
 	env := os.Getenv("GIN_MODE")
 
