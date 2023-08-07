@@ -7,13 +7,12 @@ import (
 	"math"
 	"reflect"
 
-	"github.com/brianr01/go-blockus-serverless/helpers"
 	"github.com/brianr01/go-blockus-serverless/types"
 )
 
 func CreateAllPieceDetails(folderLocation string) []types.PieceDetails {
 	var details []types.PieceDetails
-	for _, fileName := range helpers.ListDirectory(folderLocation) {
+	for _, fileName := range ListDirectory(folderLocation) {
 		details = append(details, CreatePieceDetails(fileName, folderLocation))
 	}
 
@@ -21,9 +20,9 @@ func CreateAllPieceDetails(folderLocation string) []types.PieceDetails {
 }
 
 func CreatePieceDetails(fileName string, folderLocation string) types.PieceDetails {
-	name := helpers.GetNameFromFile(fileName)
+	name := GetNameFromFile(fileName)
 
-	image := helpers.GetImageFromFile(fmt.Sprintf("%s/%s", folderLocation, fileName))
+	image := GetImageFromFile(fmt.Sprintf("%s/%s", folderLocation, fileName))
 
 	ridgidPiece := CreateRidigPieceFromImage(image)
 	dimensions := GetDimensionsFromRidigPiece(ridgidPiece)
