@@ -6,7 +6,6 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/brianr01/go-blockus-serverless/helpers"
 	"github.com/brianr01/go-blockus-serverless/types"
 	"github.com/brianr01/go-blockus-serverless/utils"
 )
@@ -179,8 +178,8 @@ func TestRotateRidgidPiece(t *testing.T) {
 				t.Errorf(
 					"Test '%s' did not recieve the expectecd value.\nExpected:\n%s\nActual:\n%s\n",
 					tt.name,
-					helpers.GetStringFrom2d(tt.want),
-					helpers.GetStringFrom2d(result),
+					utils.GetStringFrom2d(tt.want),
+					utils.GetStringFrom2d(result),
 				)
 			}
 		})
@@ -294,8 +293,8 @@ func TestCreateRidigPieceFromImage(t *testing.T) {
 				t.Errorf(
 					"Test '%s' did not recieve the expectecd value.\nExpected:\n%s\nActual:\n%s\n",
 					tt.name,
-					helpers.GetStringFrom2d(tt.want),
-					helpers.GetStringFrom2d(result),
+					utils.GetStringFrom2d(tt.want),
+					utils.GetStringFrom2d(result),
 				)
 			}
 		})

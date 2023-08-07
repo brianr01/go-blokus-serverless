@@ -50,7 +50,7 @@ func GetValidSymmetriesFromRidgidPiece(p types.RidgidPiece) []types.Symmetry {
 
 			rp := RotateRidgidPiece(p, r*90)
 			if mirrored {
-				rp = helpers.ReverseRows2d(rp)
+				rp = ReverseRows2d(rp)
 			}
 
 			if !RidgidPieceInRidgidPieces(rp, validRidigPieces) {
@@ -77,7 +77,7 @@ func CreateRidigPieceFromImage(img image.Image) types.RidgidPiece {
 		p[x] = make([]int, bY)
 
 		for y := 0; y < bY; y++ {
-			if helpers.IsPixelWhite(x, y, img) {
+			if IsPixelWhite(x, y, img) {
 				p[x][y] = 0
 				continue
 			}
@@ -102,7 +102,7 @@ func GetDimensionsFromRidigPiece(p types.RidgidPiece) [2]int {
 }
 
 func RotateRidgidPiece(p types.RidgidPiece, r int) types.RidgidPiece {
-	if !helpers.IsRotationValidFor90Degrees(r) {
+	if !IsRotationValidFor90Degrees(r) {
 		log.Fatalf("Cannot rotate ridgid piece.  Invalid rotation %v", r)
 	}
 
@@ -126,11 +126,11 @@ func RotateRidgidPiece(p types.RidgidPiece, r int) types.RidgidPiece {
 }
 
 func RotateRidigidPieceCounterClockwise(p types.RidgidPiece) types.RidgidPiece {
-	return helpers.ReverseRows2d(helpers.Transpose2d(p))
+	return ReverseRows2d(Transpose2d(p))
 }
 
 func RotateRidigidPieceClockwise(p types.RidgidPiece) types.RidgidPiece {
-	return helpers.ReverseColumns2d(helpers.Transpose2d(p))
+	return ReverseColumns2d(Transpose2d(p))
 }
 
 func RidgidPieceInRidgidPieces(p1 types.RidgidPiece, ps []types.RidgidPiece) bool {

@@ -1,10 +1,10 @@
-package helpers_test
+package utils_test
 
 import (
 	"reflect"
 	"testing"
 
-	"github.com/brianr01/go-blockus-serverless/helpers"
+	"github.com/brianr01/go-blockus-serverless/utils"
 )
 
 func TestIsRotationValidFor90Degrees(t *testing.T) {
@@ -67,7 +67,7 @@ func TestIsRotationValidFor90Degrees(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := helpers.IsRotationValidFor90Degrees(tt.input)
+			result := utils.IsRotationValidFor90Degrees(tt.input)
 
 			if result != tt.want {
 				t.Errorf(
@@ -154,13 +154,13 @@ func TestTranspose2d(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := helpers.Transpose2d(tt.input)
+			result := utils.Transpose2d(tt.input)
 
 			if !reflect.DeepEqual(result, tt.want) {
 				t.Errorf(
 					"Transpose operation '%s' did not retun the expected output.\n Want:\n%s\nResult:\n%s\n",
-					tt.name, helpers.GetStringFrom2d(tt.want),
-					helpers.GetStringFrom2d(result),
+					tt.name, utils.GetStringFrom2d(tt.want),
+					utils.GetStringFrom2d(result),
 				)
 			}
 		})
@@ -213,12 +213,12 @@ func TestReverseRows2d(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := helpers.ReverseRows2d(tt.input)
+			result := utils.ReverseRows2d(tt.input)
 			if !reflect.DeepEqual(result, tt.want) {
 				t.Errorf(
 					"Reverse rows 2d operation '%s' did not retun the expected output.\n Want:\n%s\nResult:\n%s\n",
-					tt.name, helpers.GetStringFrom2d(tt.want),
-					helpers.GetStringFrom2d(result),
+					tt.name, utils.GetStringFrom2d(tt.want),
+					utils.GetStringFrom2d(result),
 				)
 			}
 		})
@@ -271,12 +271,12 @@ func TestReverseColumns2d(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := helpers.ReverseColumns2d(tt.input)
+			result := utils.ReverseColumns2d(tt.input)
 			if !reflect.DeepEqual(result, tt.want) {
 				t.Errorf(
 					"Reverse Column 2d operation '%s' did not retun the expected output.\n Want:\n%s\nResult:\n%s\n",
-					tt.name, helpers.GetStringFrom2d(tt.want),
-					helpers.GetStringFrom2d(result),
+					tt.name, utils.GetStringFrom2d(tt.want),
+					utils.GetStringFrom2d(result),
 				)
 			}
 		})
