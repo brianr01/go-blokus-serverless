@@ -1,7 +1,6 @@
 package utils_test
 
 import (
-	"image"
 	"image/color"
 	"reflect"
 	"testing"
@@ -286,7 +285,7 @@ func TestCreateRidigPieceFromImage(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			img := createImage(tt.input)
+			img := utils.CreateImageFrom2dColor(tt.input)
 			result := utils.CreateRidigPieceFromImage(img)
 
 			if !reflect.DeepEqual(result, tt.want) {
@@ -536,24 +535,6 @@ func TestRidgidPieceInRidgidPieces(t *testing.T) {
 			}
 		})
 	}
-}
-
-func createImage(clrs [][]color.RGBA) image.Image {
-	width := len(clrs)
-	height := len(clrs[0])
-
-	upLeft := image.Point{0, 0}
-	lowRight := image.Point{width, height}
-
-	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
-
-	for i, _ := range clrs {
-		for j, clr := range clrs[i] {
-			img.Set(i, j, clr)
-		}
-	}
-
-	return img
 }
 
 func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {

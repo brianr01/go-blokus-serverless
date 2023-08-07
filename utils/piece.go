@@ -22,7 +22,7 @@ func CreateAllPieceDetails(folderLocation string) []types.PieceDetails {
 func CreatePieceDetails(fileName string, folderLocation string) types.PieceDetails {
 	name := GetNameFromFile(fileName)
 
-	image := GetImageFromFile(fmt.Sprintf("%s/%s", folderLocation, fileName))
+	image := GetPngImageFromFile(fmt.Sprintf("%s/%s", folderLocation, fileName))
 
 	ridgidPiece := CreateRidigPieceFromImage(image)
 	dimensions := GetDimensionsFromRidigPiece(ridgidPiece)
