@@ -8,10 +8,12 @@ import (
 	"strings"
 )
 
+// Separates the name from the extension.
 func GetNameFromFile(n string) string {
 	return strings.Split(n, ".")[0]
 }
 
+// Lists a directory's files given a path.
 func ListDirectory(dirName string) []string {
 	file, err := os.Open(dirName)
 
@@ -29,12 +31,13 @@ func ListDirectory(dirName string) []string {
 	return list
 }
 
-func GetImageFromFile(filePath string) image.Image {
+func GetPngImageFromFile(filePath string) image.Image {
 	file, err := os.Open(filePath)
+	defer file.Close()
+
 	if err != nil {
 		log.Fatalf("Unable to open directory '%s' due to error %s", filePath, err)
 	}
-	defer file.Close()
 
 	image, err := png.Decode(file)
 
