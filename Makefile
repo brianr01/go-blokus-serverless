@@ -7,7 +7,7 @@ build:
 clean:
 	rm -rf ./bin ./vendor
 
-local:
+local: build
 	go run main.go
 
 deploy: clean build
