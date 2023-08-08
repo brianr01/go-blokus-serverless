@@ -8,6 +8,12 @@ import (
 	"github.com/brianr01/go-blockus-serverless/types"
 )
 
+func GetGridWithValidMove(m types.Move, g types.Grid) types.Grid {
+	gNew := CopyGrid(g)
+
+	return placePiece(m.ColorNumber, m.RidgidPiece, m.Coordinate, gNew)
+}
+
 // func IsPiecePlayableAtCoordinate(x, y, types.RidgidPiece)
 // func GetPlayableCoordinatesForColor(clr types.ColorNumber, g types.Grid) []types.Coordinate {
 // 	return GetCoordinatesWithMinAvailabilityNumber(constants.AvailabilityNumberPlayable, clr, g)
@@ -244,6 +250,22 @@ func convertGridTo2dInts(g types.Grid) [][]int {
 
 func GetGridSize(g types.Grid) [2]int {
 	return [2]int{len(g), len(g[0])}
+}
+
+func CopyGrid(g types.Grid) types.Grid {
+	var gNew types.Grid
+	gSize := GetGridSize(g)
+	w, h := gSize[0], gSize[1]
+
+	for x := 0; x < w; x++ {
+		var row []types.ColorNumber
+		for y := 0; y < h; y++ {
+			row = append(row, g[x][y])
+		}
+		gNew = append(gNew, row)
+	}
+
+	return g
 }
 
 func CreateEmptyGrid(w int, h int) types.Grid {

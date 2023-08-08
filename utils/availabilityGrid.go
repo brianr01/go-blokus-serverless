@@ -12,15 +12,14 @@ import (
 
 func GetAvailabilityNumbersFromCoordinates(cs []types.Coordinate, ag types.AvailabilityGrid) []types.AvailabilityNumber {
 	as := make([]types.AvailabilityNumber, 0)
-
 	for _, c := range cs {
-		as = append(as, gatAvailabilityNumberForCoordinate(c, ag))
+		as = append(as, getAvailabilityNumberForCoordinate(c, ag))
 	}
 
 	return as
 }
 
-func gatAvailabilityNumberForCoordinate(c types.Coordinate, ag types.AvailabilityGrid) types.AvailabilityNumber {
+func getAvailabilityNumberForCoordinate(c types.Coordinate, ag types.AvailabilityGrid) types.AvailabilityNumber {
 	return ag[c.X][c.Y]
 }
 

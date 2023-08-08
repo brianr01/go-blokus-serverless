@@ -32,6 +32,9 @@ func main() {
 	gameRoutes.GET("/pieces", game.GetAllPieces)
 	gameRoutes.GET("/moves", game.GetValidMoves)
 	gameRoutes.POST("/transform-grid", game.TransformGrid)
+	gameRoutes.POST("/availability-grid", game.GetAvailabilityGrid)
+	gameRoutes.POST("/probability/get-best-moves", game.GetBestMoves)
+	gameRoutes.POST("/get-empty-grid", game.GetEmptyGrid)
 
 	env := os.Getenv("GIN_MODE")
 

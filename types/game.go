@@ -25,6 +25,10 @@ type AvailabilityNumber int
 
 type AvailabilityGrid [][]AvailabilityNumber
 
+type ProbabilityGrid [][]float64
+
+type ProbabilityPiece float64
+
 type Symmetry struct {
 	Mirror              bool
 	Rotation            int
