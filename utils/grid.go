@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"log"
+	"math"
+
 	"github.com/brianr01/go-blockus-serverless/constants"
 	"github.com/brianr01/go-blockus-serverless/types"
 )
@@ -160,6 +163,83 @@ func IsCoordinateOnGrid(c types.Coordinate, g types.Grid) bool {
 	}
 
 	return true
+}
+
+func SwitchColorNumbers(m map[types.ColorNumber]types.ColorNumber, g types.Grid) types.Grid {
+	size := GetGridSize(g)
+	w, h := size[0], size[1]
+	gNew := CreateEmptyGrid(w, h)
+
+	for i := 0; i < w; i++ {
+		for j := 0; j < h; j++ {
+
+			mappedClr, found := m[g[i][j]]
+
+			if found {
+				gNew[i][j] = mappedClr
+				continue
+			}
+			gNew[i][j] = g[i][j]
+		}
+	}
+
+	return gNew
+}
+
+func RotateGrid(r int, g types.Grid) types.Grid {
+	if !IsRotationValidFor90Degrees(r) {
+		log.Fatalf("Cannot grid.  Invalid rotation %v", r)
+	}
+
+	rotateClockWise := r >= 0
+
+	rotations := int(math.Abs(float64(r / 90)))
+
+	ints2d := convertGridTo2dInts(g)
+
+	for i := 0; i < rotations; i++ {
+		if rotateClockWise {
+			ints2d = ReverseColumns2d(Transpose2d(ints2d))
+		} else {
+			ints2d = ReverseRows2d(Transpose2d(ints2d))
+		}
+	}
+
+	g = convert2dIntsToGrid(ints2d)
+
+	return g
+}
+
+// func convertGridToHtmlString(g types.Grid) {
+
+// }
+
+func convert2dIntsToGrid(ints2d [][]int) types.Grid {
+	w, h := len(ints2d), len(ints2d[0])
+	g := CreateEmptyGrid(w, h)
+
+	for i := 0; i < w; i++ {
+		for j := 0; j < h; j++ {
+			g[i][j] = types.ColorNumber(ints2d[i][j])
+		}
+	}
+
+	return g
+}
+
+func convertGridTo2dInts(g types.Grid) [][]int {
+	ints2d := make([][]int, len(g))
+
+	for i, _ := range ints2d {
+		row := make([]int, len(g[0]))
+		ints2d[i] = row
+
+		for j, _ := range row {
+			ints2d[i][j] = int(g[i][j])
+		}
+	}
+
+	return ints2d
 }
 
 func GetGridSize(g types.Grid) [2]int {
