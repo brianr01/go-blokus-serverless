@@ -7,19 +7,62 @@ import (
 	"math"
 	"reflect"
 
+	"github.com/brianr01/go-blockus-serverless/constants"
 	"github.com/brianr01/go-blockus-serverless/types"
 )
 
-func CreateAllPieceDetails(folderLocation string) []types.PieceDetails {
-	var details []types.PieceDetails
+func GetPlayableCoordinatesForRidgidPiece(rp types.RidgidPiece) []types.Coordinate {
+	ds := GetDimensionsFromRidigPiece(rp)
+	w, h := ds[0]+2, ds[1]+2 // +2 allows the piece to sit in the middle of the empty board.
+
+	// Create a empty board and place the piece in the middle of it.  Then get the available locations.
+	g := CreateEmptyGrid(w, h)
+	cBase := types.Coordinate{
+		X: 1,
+		Y: 1,
+	}
+	g = placePiece(constants.ColorNumberGeneric, rp, cBase, g)
+
+	ag := GetAvailabilityGridFromGrid(constants.ColorNumberGeneric, g)
+
+	anMinCoords := GetCoordiantesWithMinAvailabilityNumber(constants.AvailabilityNumberPlayable, ag)
+
+	csCorners := GetCornerCoordinatesForCoordinates(anMinCoords, g)
+
+	csColors := ShiftCoordinates(1, 1, GetColorCoordinatesForRidgidPiece(rp))
+
+	csPlayable := FilterCoordinatesByMatchingCoordinates(csColors, csCorners)
+
+	return ShiftCoordinates(-1, -1, csPlayable)
+}
+
+func GetColorCoordinatesForRidgidPiece(rp types.RidgidPiece) []types.Coordinate {
+	cs := make([]types.Coordinate, 0)
+
+	for x, row := range rp {
+		for y, v := range row {
+			if v != int(constants.ColorNumberEmpty) {
+				cs = append(cs, types.Coordinate{
+					X: x,
+					Y: y,
+				})
+			}
+		}
+	}
+
+	return cs
+}
+
+func CreateAllPieceDetails(folderLocation string) []types.PieceDetail {
+	var details []types.PieceDetail
 	for _, fileName := range ListDirectory(folderLocation) {
-		details = append(details, CreatePieceDetails(fileName, folderLocation))
+		details = append(details, CreatePieceDetail(fileName, folderLocation))
 	}
 
 	return details
 }
 
-func CreatePieceDetails(fileName string, folderLocation string) types.PieceDetails {
+func CreatePieceDetail(fileName string, folderLocation string) types.PieceDetail {
 	name := GetNameFromFile(fileName)
 
 	image := GetPngImageFromFile(fmt.Sprintf("%s/%s", folderLocation, fileName))
@@ -28,7 +71,7 @@ func CreatePieceDetails(fileName string, folderLocation string) types.PieceDetai
 	dimensions := GetDimensionsFromRidigPiece(ridgidPiece)
 	symmetries := GetValidSymmetriesFromRidgidPiece(ridgidPiece)
 
-	pieceDetails := types.PieceDetails{
+	pieceDetails := types.PieceDetail{
 		RidgidPiece: ridgidPiece,
 		Name:        name,
 		Dimensions:  dimensions,
@@ -55,9 +98,10 @@ func GetValidSymmetriesFromRidgidPiece(p types.RidgidPiece) []types.Symmetry {
 			if !RidgidPieceInRidgidPieces(rp, validRidigPieces) {
 				validRidigPieces = append(validRidigPieces, rp)
 				symmetries = append(symmetries, types.Symmetry{
-					Mirror:      mirrored,
-					Rotation:    r,
-					RidgidPiece: rp,
+					Mirror:              mirrored,
+					Rotation:            r,
+					RidgidPiece:         rp,
+					PlayableCoordinates: GetPlayableCoordinatesForRidgidPiece(rp),
 				})
 			}
 		}

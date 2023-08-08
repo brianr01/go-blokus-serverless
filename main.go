@@ -30,6 +30,7 @@ func main() {
 
 	gameRoutes := g.Group("/game")
 	gameRoutes.GET("/pieces", game.GetAllPieces)
+	gameRoutes.GET("/moves", game.GetValidMoves)
 
 	env := os.Getenv("GIN_MODE")
 

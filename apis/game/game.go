@@ -10,6 +10,6 @@ import (
 
 func Test(c *gin.Context) {
 	basePath := "./images/pieces"
-	var details []types.PieceDetails = utils.CreateAllPieceDetails(basePath)
+	var details []types.PieceDetail = utils.CreateAllPieceDetails(basePath)
 	c.IndentedJSON(http.StatusOK, details)
 }

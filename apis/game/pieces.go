@@ -10,6 +10,6 @@ import (
 )
 
 func GetAllPieces(c *gin.Context) {
-	var details []types.PieceDetails = utils.CreateAllPieceDetails(constants.PiecesImagePath)
+	var details []types.PieceDetail = utils.CreateAllPieceDetails(constants.PiecesImagePath)
 	c.IndentedJSON(http.StatusOK, details)
 }
