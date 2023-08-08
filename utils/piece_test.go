@@ -9,6 +9,64 @@ import (
 	"github.com/brianr01/go-blockus-serverless/utils"
 )
 
+func TestGetColorCoordinatesForRidgidPiece(t *testing.T) {
+	tests := []struct {
+		name        string
+		ridgidPiece types.RidgidPiece
+		want        []types.Coordinate
+	}{
+		{
+			name: "one piece",
+			ridgidPiece: types.RidgidPiece{
+				{
+					1,
+				},
+			},
+			want: []types.Coordinate{
+				{
+					X: 0,
+					Y: 0,
+				},
+			},
+		},
+		{
+			name: "triomino L",
+			ridgidPiece: types.RidgidPiece{
+				{1, 0},
+				{1, 0},
+				{1, 1},
+			},
+			want: []types.Coordinate{
+				{
+					X: 0,
+					Y: 0,
+				},
+				{
+					X: 1,
+					Y: 0,
+				},
+				{
+					X: 2,
+					Y: 0,
+				},
+				{
+					X: 2,
+					Y: 1,
+				},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := utils.GetColorCoordinatesForRidgidPiece(tt.ridgidPiece)
+			if !reflect.DeepEqual(tt.want, result) {
+				t.Errorf("The result %v does not match %v", result, tt.want)
+			}
+		})
+	}
+}
+
 func TestRotateRidgidPiece(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -539,21 +597,29 @@ func TestRidgidPieceInRidgidPieces(t *testing.T) {
 
 func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 	tests := []struct {
-		name  string
-		input types.RidgidPiece
-		want  []types.Symmetry
+		name                      string
+		input                     types.RidgidPiece
+		ignorePlayableCoordinates bool
+		want                      []types.Symmetry
 	}{
 		{
 			name: "One Piece Symmetries",
 			input: types.RidgidPiece{
 				{1},
 			},
+			ignorePlayableCoordinates: false,
 			want: []types.Symmetry{
 				{
 					Mirror:   false,
 					Rotation: 0,
 					RidgidPiece: types.RidgidPiece{
 						{1},
+					},
+					PlayableCoordinates: []types.Coordinate{
+						{
+							X: 0,
+							Y: 0,
+						},
 					},
 				},
 			},
@@ -564,6 +630,7 @@ func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 				{1, 0},
 				{1, 1},
 			},
+			ignorePlayableCoordinates: false,
 			want: []types.Symmetry{
 				{
 					Mirror:   false,
@@ -572,6 +639,20 @@ func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 						{1, 0},
 						{1, 1},
 					},
+					PlayableCoordinates: []types.Coordinate{
+						{
+							X: 0,
+							Y: 0,
+						},
+						{
+							X: 1,
+							Y: 0,
+						},
+						{
+							X: 1,
+							Y: 1,
+						},
+					},
 				},
 				{
 					Mirror:   true,
@@ -579,6 +660,20 @@ func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 					RidgidPiece: types.RidgidPiece{
 						{1, 1},
 						{1, 0},
+					},
+					PlayableCoordinates: []types.Coordinate{
+						{
+							X: 0,
+							Y: 0,
+						},
+						{
+							X: 0,
+							Y: 1,
+						},
+						{
+							X: 1,
+							Y: 0,
+						},
 					},
 				},
 				{
@@ -588,6 +683,20 @@ func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 						{1, 1},
 						{0, 1},
 					},
+					PlayableCoordinates: []types.Coordinate{
+						{
+							X: 0,
+							Y: 0,
+						},
+						{
+							X: 0,
+							Y: 1,
+						},
+						{
+							X: 1,
+							Y: 1,
+						},
+					},
 				},
 				{
 					Mirror:   true,
@@ -595,6 +704,20 @@ func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 					RidgidPiece: types.RidgidPiece{
 						{0, 1},
 						{1, 1},
+					},
+					PlayableCoordinates: []types.Coordinate{
+						{
+							X: 0,
+							Y: 1,
+						},
+						{
+							X: 1,
+							Y: 0,
+						},
+						{
+							X: 1,
+							Y: 1,
+						},
 					},
 				},
 			},
@@ -606,6 +729,7 @@ func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 				{1},
 				{1},
 			},
+			ignorePlayableCoordinates: false,
 			want: []types.Symmetry{
 				{
 					Mirror:   false,
@@ -615,12 +739,32 @@ func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 						{1},
 						{1},
 					},
+					PlayableCoordinates: []types.Coordinate{
+						{
+							X: 0,
+							Y: 0,
+						},
+						{
+							X: 2,
+							Y: 0,
+						},
+					},
 				},
 				{
 					Mirror:   false,
 					Rotation: 1,
 					RidgidPiece: types.RidgidPiece{
 						{1, 1, 1},
+					},
+					PlayableCoordinates: []types.Coordinate{
+						{
+							X: 0,
+							Y: 0,
+						},
+						{
+							X: 0,
+							Y: 2,
+						},
 					},
 				},
 			},
@@ -632,6 +776,7 @@ func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 				{0, 1, 1},
 				{0, 1, 0},
 			},
+			ignorePlayableCoordinates: true,
 			want: []types.Symmetry{
 				{
 					Mirror:   false,
@@ -712,7 +857,35 @@ func TestGetValidSymmetriesFromRidgidPiece(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := utils.GetValidSymmetriesFromRidgidPiece(tt.input)
+			if tt.ignorePlayableCoordinates {
+				for i := range result {
+					symmetryResult := result[i]
+					symmetry := tt.want[i]
+					if !reflect.DeepEqual(symmetryResult.Mirror, symmetry.Mirror) {
+						t.Errorf("The mirror value did mot match for symmetry with index %v", i)
+					}
 
+					if !reflect.DeepEqual(symmetryResult.RidgidPiece, symmetry.RidgidPiece) {
+						t.Errorf(
+							"The ridgnid peace symmetry with index %v.\nExpected: \n%v\nActual:   \n%v\n",
+							i,
+							symmetry.RidgidPiece,
+							symmetryResult.RidgidPiece,
+						)
+					}
+
+					if !reflect.DeepEqual(symmetryResult.Rotation, symmetry.Rotation) {
+						t.Errorf(
+							"The rotation value did not match for symmetry with index %v.\nExpected: \n%v\nActual:   \n%v\n",
+							i,
+							symmetry.Rotation,
+							symmetryResult.Rotation,
+						)
+					}
+				}
+
+				return
+			}
 			if !reflect.DeepEqual(result, tt.want) {
 				t.Errorf(
 					"Test '%s' did not recieve expected value.\nExpected: %v\nActual:   %v\n",
