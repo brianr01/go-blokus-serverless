@@ -13,11 +13,15 @@ func AvailabilityNumberInAvailabilityNumbers(an types.AvailabilityNumber, ans []
 }
 
 func AvailabilityNumbersWithMinium(anMin types.AvailabilityNumber, ans []types.AvailabilityNumber) bool {
+	if len(ans) == 0 {
+		return false
+	}
+
 	for _, anToCheck := range ans {
-		if anToCheck >= anMin {
-			return true
+		if anToCheck < anMin {
+			return false
 		}
 	}
 
-	return false
+	return true
 }
