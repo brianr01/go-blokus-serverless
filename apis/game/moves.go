@@ -37,11 +37,12 @@ func GetValidMoves(c *gin.Context) {
 	cs := utils.GetCoordiantesWithMinAvailabilityNumber(constants.AvailabilityNumberPlayable, ag)
 
 	ms := utils.CreateMovesAtCoordinatesForPieceDetails(pds, cs, clr)
+	msValid := utils.FilterMovesAllowedMoves(ms, ag, g)
 
 	res := make([]ValidMovesResponse, 0)
 
 	if len(ms) > 0 {
-		for _, m := range ms {
+		for _, m := range msValid {
 			gWithM := utils.GetGridWithValidMove(m, g)
 
 			res = append(res, ValidMovesResponse{
