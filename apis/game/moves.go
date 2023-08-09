@@ -11,10 +11,9 @@ import (
 )
 
 type GetValidMovesRequest struct {
-	ColorNumber      types.ColorNumber
-	Grid             types.Grid
-	AvailabilityGrid types.AvailabilityGrid
-	PieceDetails     []types.PieceDetail
+	ColorNumber  types.ColorNumber
+	Grid         types.Grid
+	PieceDetails []types.PieceDetail
 }
 
 type ValidMovesResponse struct {
