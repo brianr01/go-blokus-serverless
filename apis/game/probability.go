@@ -19,8 +19,9 @@ type GetBestMovesRequest struct {
 }
 
 type BestMove struct {
-	Move types.Move
-	Grid types.Grid
+	Move       types.Move
+	Grid       types.Grid
+	PieceIndex int
 }
 
 func GetBestMoves(c *gin.Context) {
@@ -42,14 +43,10 @@ func GetBestMoves(c *gin.Context) {
 	csRanked := utils.GetHighestRankingCoordinates(pg)
 	ppsIndexesRanked := utils.GetHighestRankingPieces(pps)
 
-	pdsRanked := make([]types.PieceDetail, 0)
-	for _, index := range ppsIndexesRanked {
-		pdsRanked = append(pdsRanked, pds[index])
-	}
-
 	bestMoves := make([]BestMove, 0)
 	for _, cRanked := range csRanked {
-		for _, pdRanked := range pdsRanked {
+		for _, ppIndexRanked := range ppsIndexesRanked {
+			pdRanked := pds[ppIndexRanked]
 			ms := utils.CreateMovesAtCoordinatesForPieceDetails([]types.PieceDetail{pdRanked}, []types.Coordinate{cRanked}, clr)
 			msValid := utils.FilterMovesAllowedMoves(ms, ag, g)
 
@@ -58,8 +55,9 @@ func GetBestMoves(c *gin.Context) {
 					gridWithMValid := utils.GetGridWithValidMove(mValid, g)
 
 					bestMoves = append(bestMoves, BestMove{
-						Move: mValid,
-						Grid: gridWithMValid,
+						Move:       mValid,
+						Grid:       gridWithMValid,
+						PieceIndex: ppIndexRanked,
 					})
 				}
 			}
