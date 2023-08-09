@@ -18,23 +18,20 @@ func SetUnavailableCoordinatesToZero(ag types.AvailabilityGrid, pg types.Probabi
 }
 
 func GetHighestRankingCoordinates(pg types.ProbabilityGrid) []types.Coordinate {
-	var highestRank float64
-	var highestRankingCoord types.Coordinate
+	// TODO update to return best an not just non zero.
+	cs := make([]types.Coordinate, 0)
 
 	for x := 0; x < len(pg); x++ {
 		for y := 0; y < len(pg[0]); y++ {
 			rank := pg[x][y]
-			if highestRank < rank {
-				highestRank = rank
-				highestRankingCoord = types.Coordinate{
+			if 0 < rank {
+				cs = append(cs, types.Coordinate{
 					X: x,
 					Y: y,
-				}
+				})
 			}
 		}
 	}
 
-	return []types.Coordinate{
-		highestRankingCoord,
-	}
+	return cs
 }
