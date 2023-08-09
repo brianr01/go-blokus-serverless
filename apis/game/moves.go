@@ -1,6 +1,7 @@
 package game
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/brianr01/go-blockus-serverless/constants"
@@ -9,38 +10,47 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type GetValidMovesRequest struct {
+	ColorNumber      types.ColorNumber
+	Grid             types.Grid
+	AvailabilityGrid types.AvailabilityGrid
+	PieceDetails     []types.PieceDetail
+}
+
+type ValidMovesResponse struct {
+	Move types.Move
+	Grid types.Grid
+}
+
 func GetValidMoves(c *gin.Context) {
-	clr := constants.ColorNumberBlue
-	g := types.Grid{
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3},
+	var requestBody GetBestMovesRequest
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		log.Fatal("An error has occured.")
 	}
 
-	pds := utils.CreateAllPieceDetails("./images/pieces")
+	g := requestBody.Grid
+	clr := requestBody.ColorNumber
+
+	pds := requestBody.PieceDetails
 
 	ag := utils.GetAvailabilityGridFromGrid(clr, g)
 	cs := utils.GetCoordiantesWithMinAvailabilityNumber(constants.AvailabilityNumberPlayable, ag)
 
-	pds = append(pds, utils.CreatePieceDetail("OnePiece.png", "./images/pieces"))
 	ms := utils.CreateMovesAtCoordinatesForPieceDetails(pds, cs, clr)
+
+	res := make([]ValidMovesResponse, 0)
+
+	if len(ms) > 0 {
+		for _, m := range ms {
+			gWithM := utils.GetGridWithValidMove(m, g)
+
+			res = append(res, ValidMovesResponse{
+				Move: m,
+				Grid: gWithM,
+			})
+		}
+	}
 
 	c.IndentedJSON(http.StatusOK, len(ms))
 }

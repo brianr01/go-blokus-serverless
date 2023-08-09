@@ -29,19 +29,19 @@ func CreateMovesAtCoordinateForPieceDetail(pd types.PieceDetail, c types.Coordin
 	ms := make([]types.Move, 0)
 
 	for _, s := range pd.Symmetries {
-		ms = append(ms, CreateMovesAtCoordinateForSymmetry(s, c, clr)...)
+		ms = append(ms, CreateMovesAtCoordinateForSymmetry(s, c, clr, pd.Name)...)
 	}
 
 	return ms
 }
 
-func CreateMovesAtCoordinateForSymmetry(s types.Symmetry, c types.Coordinate, clr types.ColorNumber) []types.Move {
+func CreateMovesAtCoordinateForSymmetry(s types.Symmetry, c types.Coordinate, clr types.ColorNumber, pdName string) []types.Move {
 	cs := ShiftCoordinatesByCoordinate(c, s.PlayableCoordinates)
 
-	return CreateMovesAtCoordinates(s.RidgidPiece, clr, cs)
+	return CreateMovesAtCoordinates(s.RidgidPiece, clr, cs, pdName)
 }
 
-func CreateMovesAtCoordinates(rp types.RidgidPiece, clr types.ColorNumber, cs []types.Coordinate) []types.Move {
+func CreateMovesAtCoordinates(rp types.RidgidPiece, clr types.ColorNumber, cs []types.Coordinate, pdName string) []types.Move {
 	ms := make([]types.Move, len(cs))
 
 	for i, c := range cs {
@@ -49,6 +49,7 @@ func CreateMovesAtCoordinates(rp types.RidgidPiece, clr types.ColorNumber, cs []
 			Coordinate:  c,
 			ColorNumber: clr,
 			RidgidPiece: rp,
+			PieceName:   pdName,
 		}
 	}
 

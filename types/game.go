@@ -9,6 +9,7 @@ type Move struct {
 	Coordinate  Coordinate
 	ColorNumber ColorNumber
 	RidgidPiece RidgidPiece
+	PieceName   string
 }
 
 type ColorNumber int
