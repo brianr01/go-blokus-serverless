@@ -265,7 +265,7 @@ func CopyGrid(g types.Grid) types.Grid {
 		gNew = append(gNew, row)
 	}
 
-	return g
+	return gNew
 }
 
 func CreateEmptyGrid(w int, h int) types.Grid {
