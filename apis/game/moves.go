@@ -51,5 +51,5 @@ func GetValidMoves(c *gin.Context) {
 		}
 	}
 
-	c.IndentedJSON(http.StatusOK, len(ms))
+	c.IndentedJSON(http.StatusOK, res)
 }
