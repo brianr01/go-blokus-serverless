@@ -30,7 +30,7 @@ func main() {
 
 	gameRoutes := g.Group("/game")
 	gameRoutes.GET("/pieces", game.GetAllPieces)
-	gameRoutes.GET("/moves", game.GetValidMoves)
+	gameRoutes.POST("/moves", game.GetValidMoves)
 	gameRoutes.POST("/transform-grid", game.TransformGrid)
 	gameRoutes.POST("/availability-grid", game.GetAvailabilityGrid)
 	gameRoutes.POST("/probability/get-best-moves", game.GetBestMoves)
