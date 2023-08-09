@@ -36,6 +36,7 @@ func GetBestMoves(c *gin.Context) {
 	pps := requestBody.ProbabilityPieces
 	pds := requestBody.PieceDetails
 
+	pg = utils.SetUnavailableCoordinatesToZero(ag, pg)
 	clr := requestBody.ColorNumber
 
 	csRanked := utils.GetHighestRankingCoordinates(pg)
