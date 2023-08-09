@@ -89,11 +89,11 @@ func IsMoveAllowed(m types.Move, ag types.AvailabilityGrid, g types.Grid) bool {
 }
 
 func GetColorCoordinatesForMove(m types.Move) []types.Coordinate {
-	clrs := make([]types.Coordinate, 0)
+	cs := make([]types.Coordinate, 0)
 	rpCoords := GetColorCoordinatesForRidgidPiece(m.RidgidPiece)
 	for _, rpCoord := range rpCoords {
-		clrs = append(clrs, AddCoordinates(m.Coordinate, rpCoord))
+		cs = append(cs, AddCoordinates(m.Coordinate, rpCoord))
 	}
 
-	return clrs
+	return cs
 }
